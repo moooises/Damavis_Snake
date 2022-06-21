@@ -77,7 +77,6 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
     def place_snake(board_matrix_,snake):
         for s in snake:
             board_matrix_[s[1]][s[0]]=1
-        return board_matrix_
 
     check_board(board)
     check_snake(snake, board)
