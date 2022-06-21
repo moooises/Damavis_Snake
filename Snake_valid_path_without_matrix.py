@@ -1,5 +1,3 @@
-import copy
-
 def check_board(board):
     if len(board)!=2:
         raise ValueError(f"Board must have only two values.")
@@ -18,15 +16,28 @@ def check_snake(snake,board):
 def check_depth(depth):
     if (depth<1 or depth>20):
         raise ValueError(f"Depth must be between 1 and 20. Both inclusive.")
-       
+        
+    
 
 def numberOfAvailableDifferentPaths(board, snake, depth):
-    def move(board_matrix, snake, depth, dived, direction):
 
-        tail=snake[-1]
+    def collision(snake):
+        head = snake[0]
+        for n in snake[1:]:
+           if n[0]==head[0] and n[1]==head[1]:
+            return True
 
-        board_matrix[tail[1]][tail[0]]-=1
-        snake.pop()
+        return False 
+
+    def step_back(snake, prev_tails):
+        snake.pop(0)
+        snake.insert(len(snake),prev_tails[0])
+        prev_tails.pop(0)
+
+    def move(snake, prev_tails, board, depth, dived, direction):
+
+        prev_tails.insert(0,snake.pop())
+
         head=snake[0]
 
         if(direction=='L'):
@@ -46,46 +57,36 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
 
         head=snake[0]
 
-
-        if(head[0]<0 or head[0]>=len(board_matrix[0]) or head[1]<0 or head[1]>=len(board_matrix)):
+        if(head[0]<0 or head[1]<0 or head[0]==board[0] or head[1]==board[1] or collision(snake)):
             return 0
         else:
-            board_matrix[head[1]][head[0]]+=1
- 
-            if(board_matrix[head[1]][head[0]]==2):
-                return 0
 
-            elif (dived==depth):
+            if (dived==depth):
                 return 1
+
             else:
-                
-                L=move(copy.deepcopy(board_matrix) , snake.copy(), depth, dived+1,'L')
-                R=move(copy.deepcopy(board_matrix) , snake.copy(), depth, dived+1,'R')
-                D=move(copy.deepcopy(board_matrix) , snake.copy(), depth, dived+1,'D')
-                U=move(copy.deepcopy(board_matrix) , snake.copy(), depth, dived+1,'U')
+                L=move(snake, prev_tails, board, depth, dived+1,'L')
+                step_back(snake,prev_tails)
+                R=move(snake, prev_tails, board, depth, dived+1,'R')
+                step_back(snake,prev_tails)
+                D=move(snake, prev_tails, board, depth, dived+1,'D')
+                step_back(snake,prev_tails)
+                U=move(snake, prev_tails, board, depth, dived+1,'U')
+                step_back(snake,prev_tails)
 
                 return L+R+D+U
         
+    
+    prev_tails=[]
 
-    def create_board(board):
-        board_matrix_=[]
-        for n in range(0,board[1]):
-            board_matrix_.append([])
-            board_matrix_[-1]=[0 for i in range(board[0])]
-        return board_matrix_
-
-    def place_snake(board_matrix_,snake):
-        for s in snake:
-            board_matrix_[s[1]][s[0]]=1
-        return board_matrix_
-
-    board_matrix=create_board(board)
-    place_snake(board_matrix, snake)
-
-    L=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'L')
-    R=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'R')
-    D=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'D')
-    U=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'U')
+    L=move(snake, prev_tails, board, depth, 1, 'L')
+    step_back(snake,prev_tails)
+    R=move(snake, prev_tails, board, depth, 1, 'R')
+    step_back(snake,prev_tails)
+    D=move(snake, prev_tails, board, depth, 1, 'D')
+    step_back(snake,prev_tails)
+    U=move(snake, prev_tails, board, depth, 1, 'U')
+    step_back(snake,prev_tails)
     return L+R+D+U
 
 
@@ -108,4 +109,3 @@ check_depth(depth)
 
 result=numberOfAvailableDifferentPaths(board,snake,depth)
 print(f"The number of distinct valid paths of length {depth} that the snake can make, modulo 10^9 + {result}")
-
