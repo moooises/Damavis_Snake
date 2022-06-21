@@ -79,6 +79,10 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
             board_matrix_[s[1]][s[0]]=1
         return board_matrix_
 
+    check_board(board)
+    check_snake(snake, board)
+    check_depth(depth)
+
     board_matrix=create_board(board)
     place_snake(board_matrix, snake)
 
@@ -87,7 +91,6 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
     D=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'D')
     U=move(copy.deepcopy(board_matrix) , snake.copy(), depth, 1, 'U')
     return L+R+D+U
-
 
 
 #board=[4,3]
@@ -101,10 +104,6 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
 board=[10,10]
 snake=[[5,5],[5,4],[4,4],[4,5]]
 depth=4
-
-check_board(board)
-check_snake(snake, board)
-check_depth(depth)
 
 result=numberOfAvailableDifferentPaths(board,snake,depth)
 print(f"The number of distinct valid paths of length {depth} that the snake can make, modulo 10^9 + {result}")

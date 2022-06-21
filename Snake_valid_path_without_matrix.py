@@ -77,7 +77,10 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
                 return L+R+D+U
         
     
-    prev_tails=[]
+
+    check_board(board)
+    check_snake(snake, board)
+    check_depth(depth)
 
     L=move(snake, prev_tails, board, depth, 1, 'L')
     step_back(snake,prev_tails)
@@ -103,9 +106,6 @@ board=[10,10]
 snake=[[5,5],[5,4],[4,4],[4,5]]
 depth=4
 
-check_board(board)
-check_snake(snake, board)
-check_depth(depth)
 
 result=numberOfAvailableDifferentPaths(board,snake,depth)
 print(f"The number of distinct valid paths of length {depth} that the snake can make, modulo 10^9 + {result}")
