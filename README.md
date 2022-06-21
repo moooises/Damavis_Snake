@@ -1,2 +1,3 @@
 # Damavis_Snake
-Damavis Challenge
+Damavis Challenge made using Python3.
+
