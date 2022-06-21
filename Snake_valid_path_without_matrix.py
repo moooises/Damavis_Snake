@@ -82,6 +82,8 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
     check_snake(snake, board)
     check_depth(depth)
 
+    prev_tails=[]
+
     L=move(snake, prev_tails, board, depth, 1, 'L')
     step_back(snake,prev_tails)
     R=move(snake, prev_tails, board, depth, 1, 'R')
@@ -105,6 +107,7 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
 board=[10,10]
 snake=[[5,5],[5,4],[4,4],[4,5]]
 depth=4
+
 
 
 result=numberOfAvailableDifferentPaths(board,snake,depth)
